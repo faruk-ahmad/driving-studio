@@ -214,6 +214,8 @@ const state = {
     },
     pointerThrottle: false,
     pointerBrake: false,
+    pointerThrottleId: null,
+    pointerBrakeId: null,
     drawingSession: null,
     dragSession: null,
     steeringPointerId: null,
@@ -391,18 +393,64 @@ function deleteVehicle() {
 }
 
 function setMode(mode) {
+  resetTransientInteractionState();
   state.mode = mode;
   if (mode === "draw") {
     state.panelTab = "drawing";
   } else if (mode === "drive" || mode === "edit") {
     state.panelTab = "vehicles";
   }
+  if (mode === "drive") {
+    state.selectedLandmarkId = null;
+    if (!state.selectedVehicleId && state.vehicles.length) {
+      state.selectedVehicleId = state.vehicles[0].id;
+    }
+    document.activeElement?.blur();
+  }
+  render();
+  if (mode === "drive") {
+    elements.stage.focus({ preventScroll: true });
+  }
+}
+
+function resetTransientInteractionState() {
+  const dragPointerId = state.ui.dragSession?.pointerId;
+  const steeringPointerId = state.ui.steeringPointerId;
+  const throttlePointerId = state.ui.pointerThrottleId;
+  const brakePointerId = state.ui.pointerBrakeId;
+
+  if (dragPointerId !== undefined && elements.stage.hasPointerCapture(dragPointerId)) {
+    elements.stage.releasePointerCapture(dragPointerId);
+  }
+  if (steeringPointerId !== null && elements.steeringWheel.hasPointerCapture(steeringPointerId)) {
+    elements.steeringWheel.releasePointerCapture(steeringPointerId);
+  }
+  if (throttlePointerId !== null && elements.throttleButton.hasPointerCapture(throttlePointerId)) {
+    elements.throttleButton.releasePointerCapture(throttlePointerId);
+  }
+  if (brakePointerId !== null && elements.brakeButton.hasPointerCapture(brakePointerId)) {
+    elements.brakeButton.releasePointerCapture(brakePointerId);
+  }
+
   state.ui.drawingSession = null;
   state.ui.dragSession = null;
-  render();
+  state.ui.steeringPointerId = null;
+  state.ui.pointerThrottle = false;
+  state.ui.pointerBrake = false;
+  state.ui.pointerThrottleId = null;
+  state.ui.pointerBrakeId = null;
+  state.ui.keys.throttle = false;
+  state.ui.keys.brake = false;
+  state.ui.keys.steerLeft = false;
+  state.ui.keys.steerRight = false;
+  state.ui.steeringInput = 0;
+  state.ui.targetSteering = 0;
 }
 
 function setStudioView(isVisible) {
+  if (!isVisible) {
+    resetTransientInteractionState();
+  }
   elements.landingPage.classList.toggle("is-hidden", isVisible);
   document.querySelector(".app-shell").classList.toggle("is-visible", isVisible);
   history.replaceState(null, "", isVisible ? "#driving-ground-studio" : "#top");
@@ -413,6 +461,9 @@ function setStudioView(isVisible) {
 
 function syncViewToUrl() {
   const shouldShowStudio = window.location.hash === "#driving-ground-studio";
+  if (!shouldShowStudio) {
+    resetTransientInteractionState();
+  }
   elements.landingPage.classList.toggle("is-hidden", shouldShowStudio);
   document.querySelector(".app-shell").classList.toggle("is-visible", shouldShowStudio);
 }
@@ -445,9 +496,7 @@ function setPanelFold(panelName, isFolded) {
 
 function setDrawTool(tool) {
   state.ui.drawTool = tool;
-  state.mode = "draw";
-  state.panelTab = "drawing";
-  render();
+  setMode("draw");
 }
 
 function setSignal(signal) {
@@ -1284,13 +1333,16 @@ function handleStagePointerUp(event) {
 }
 
 function handleSteeringPointerDown(event) {
+  if (state.mode !== "drive") {
+    return;
+  }
   state.ui.steeringPointerId = event.pointerId;
   elements.steeringWheel.setPointerCapture(event.pointerId);
   handleSteeringPointerMove(event);
 }
 
 function handleSteeringPointerMove(event) {
-  if (state.ui.steeringPointerId !== event.pointerId) {
+  if (state.mode !== "drive" || state.ui.steeringPointerId !== event.pointerId) {
     return;
   }
 
@@ -1410,9 +1462,9 @@ function bindEvents() {
       if (tab === "drawing") {
         setMode("draw");
       } else if (state.mode === "draw") {
+        resetTransientInteractionState();
         state.mode = "edit";
         state.panelTab = tab;
-        state.ui.drawingSession = null;
         render();
       } else {
         setPanelTab(tab);
@@ -1436,19 +1488,24 @@ function bindEvents() {
 
   const activatePointerControl = (key, button) => {
     button.addEventListener("pointerdown", event => {
+      if (state.mode !== "drive") {
+        return;
+      }
       event.preventDefault();
       button.setPointerCapture(event.pointerId);
       state.ui[key] = true;
+      state.ui[`${key}Id`] = event.pointerId;
       updateControls();
     });
     const end = event => {
-      if (!state.ui[key]) {
+      if (!state.ui[key] || state.ui[`${key}Id`] !== event.pointerId) {
         return;
       }
       if (button.hasPointerCapture(event.pointerId)) {
         button.releasePointerCapture(event.pointerId);
       }
       state.ui[key] = false;
+      state.ui[`${key}Id`] = null;
       updateControls();
     };
     button.addEventListener("pointerup", end);
