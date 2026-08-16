@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Driving Ground Studio is a visual browser workspace for driving-ground lessons, vehicle demonstrations, landmarks, and group discussion." />
+    <meta name="theme-color" content="#123f39" />
+    <title>Driving Ground Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="landingPage" class="landing-page">
+      <nav class="landing-nav" aria-label="Landing page navigation">
+        <a class="brand-lockup" href="#top">
+          <span class="brand-mark">DG</span>
+          <span>
+            <strong>Driving Ground Studio</strong>
+            <small>Visual practice, explained together</small>
+          </span>
+        </a>
+        <div class="landing-nav-links">
+          <a href="#use-cases">Use cases</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+          <button id="landingOpenStudio" class="landing-nav-cta">Open Studio <span aria-hidden="true">↗</span></button>
+        </div>
+      </nav>
+
+      <section id="top" class="landing-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">A visual workspace for road training</p>
+          <h1>Turn a driving ground into a shared lesson.</h1>
+          <p class="hero-lede">
+            Place vehicles, demonstrate movement, mark landmarks, and draw directly on a realistic driving-ground map.
+            Driving Ground Studio helps instructors and learners make every manoeuvre visible.
+          </p>
+          <div class="hero-actions">
+            <button id="heroOpenStudio" class="landing-primary-cta">Open the studio <span aria-hidden="true">→</span></button>
+            <a class="text-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-proof">
+            <span><b>01</b> Map-based practice</span>
+            <span><b>02</b> Vehicle simulation</span>
+            <span><b>03</b> Discussion-ready notes</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Preview of the driving ground studio">
+          <div class="hero-map-card">
+            <div class="hero-map-topline"><span>LIVE PRACTICE BOARD</span><span class="hero-live-dot">● Ready</span></div>
+            <div class="hero-map-art">
+              <div class="hero-road hero-road-one"></div>
+              <div class="hero-road hero-road-two"></div>
+              <div class="hero-road hero-road-three"></div>
+              <div class="hero-roundabout"></div>
+              <div class="hero-car hero-car-one">A</div>
+              <div class="hero-car hero-car-two">B</div>
+              <div class="hero-pole hero-pole-one"><span>1</span></div>
+              <div class="hero-pole hero-pole-two"><span>2</span></div>
+              <div class="hero-note"><span class="hero-note-line"></span><strong>Observe<br />the turn</strong></div>
+            </div>
+            <div class="hero-map-footer"><span>KDS Driving Ground</span><span>Map 01 / 04</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="map-attribution" aria-label="Default map attribution">
+        <div class="map-attribution-mark">MAP<br />NOTE</div>
+        <div>
+          <p class="eyebrow">Default map source</p>
+          <h2>Kounodai Driving School</h2>
+          <p>
+            The included default map was collected from publicly available imagery of Kounodai Driving School.
+            It is included in this app for learning and study purposes only. Anyone using or redistributing it should
+            remain conscious of the applicable usage policy and confirm permission or licensing before public use.
+          </p>
+        </div>
+        <span class="map-attribution-file">maps/KDS-driving-ground.png</span>
+      </section>
+
+      <section id="use-cases" class="landing-section use-case-section">
+        <div class="section-intro">
+          <p class="eyebrow">Built for the conversation around the wheel</p>
+          <h2>One board, several ways to learn.</h2>
+        </div>
+        <div class="use-case-grid">
+          <article class="use-case-card use-case-accent">
+            <span class="card-index">01</span>
+            <h3>Instructor demonstrations</h3>
+            <p>Show positioning, turning lines, signals, reversing, and stopping points without losing the bigger picture.</p>
+          </article>
+          <article class="use-case-card">
+            <span class="card-index">02</span>
+            <h3>Group discussion</h3>
+            <p>Use numbered poles, free-form drawing, and multiple vehicles to compare decisions and explain road situations.</p>
+          </article>
+          <article class="use-case-card">
+            <span class="card-index">03</span>
+            <h3>Independent study</h3>
+            <p>Replay a scenario, explore a route, and build confidence with a clear visual reference before going on the road.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="how-it-works" class="landing-section operation-section">
+        <div class="section-intro">
+          <p class="eyebrow">Start in under a minute</p>
+          <h2>A simple rhythm for practical learning.</h2>
+        </div>
+        <div class="operation-grid">
+          <div class="operation-step"><span>01</span><div><h3>Set the ground</h3><p>Use the default KDS map or browse another driving-ground image.</p></div></div>
+          <div class="operation-step"><span>02</span><div><h3>Place the situation</h3><p>Add and resize vehicles, position them on the road, and adjust their headings.</p></div></div>
+          <div class="operation-step"><span>03</span><div><h3>Operate and explain</h3><p>Switch to Drive for steering, throttle, brake, reverse, and signal demonstrations.</p></div></div>
+          <div class="operation-step"><span>04</span><div><h3>Mark the lesson</h3><p>Draw routes and add small numbered landmarks for precise discussion points.</p></div></div>
+        </div>
+      </section>
+
+      <section id="about" class="landing-section about-section">
+        <div>
+          <p class="eyebrow">About the studio</p>
+          <h2>Make the invisible parts of driving easier to see.</h2>
+        </div>
+        <p>
+          Driving Ground Studio is a lightweight browser workspace for visual road-training conversations. It is designed
+          for classrooms, instructor briefings, study groups, and anyone who learns best by seeing a situation unfold.
+          Everything stays close to the map: the vehicle, the road geometry, the landmark, and the explanation.
+        </p>
+      </section>
+
+      <section id="contact" class="landing-contact">
+        <div><p class="eyebrow">Contact and feedback</p><h2>Have an idea for the next practice tool?</h2></div>
+        <div class="contact-copy"><p>This is a focused, evolving study tool. Share feedback, teaching scenarios, or map ideas with the project team.</p><a class="text-link" href="mailto:faruk.csebrur@gmail.com">faruk.csebrur@gmail.com <span aria-hidden="true">↗</span></a></div>
+      </section>
+
+      <footer class="landing-footer">
+        <span>Driving Ground Studio</span>
+        <span>Practice the situation. Understand the road.</span>
+        <span>Planned and developed by Faruk Ahmad, with help from Codex vibe coding.</span>
+      </footer>
+    </main>
+
+    <div id="studioLoading" class="studio-loading" aria-hidden="true">
+      <div class="loading-card" role="status" aria-live="polite">
+        <span class="loading-mark">DG</span>
+        <div>
+          <strong>Preparing the practice board</strong>
+          <span>Loading map, vehicles, and controls</span>
+        </div>
+        <div class="loading-track"><span></span></div>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="studio-brand">
+          <button id="backToLanding" class="back-link" type="button"><span aria-hidden="true">←</span> Overview</button>
+          <div><p class="eyebrow">Practice board</p><h1>Driving Ground Studio</h1></div>
+        </div>
+        <div class="topbar-actions">
+          <div class="segmented" aria-label="Interaction mode">
+            <button class="mode-button active" data-mode="edit">Edit</button>
+            <button class="mode-button" data-mode="drive">Drive</button>
+            <button class="mode-button" data-mode="draw">Draw</button>
+          </div>
+          <label class="button secondary">
+            <input id="mapUpload" type="file" accept="image/*" hidden />
+            Browse Map
+          </label>
+          <button id="resetDefaultMap" class="button secondary">Default Map</button>
+          <button id="saveScenario" class="button">Save Scenario</button>
+          <label class="button secondary">
+            <input id="loadScenario" type="file" accept=".json,application/json" hidden />
+            Load Scenario
+          </label>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="panel toolbar-panel">
+          <div class="panel-utility-row">
+            <span>Workspace tools</span>
+            <button id="toggleToolbar" class="panel-toggle" type="button" aria-expanded="true" aria-controls="toolbarContent">Fold panel <span aria-hidden="true">←</span></button>
+          </div>
+          <div id="toolbarContent" class="panel-content">
+          <div class="panel-tab-strip" aria-label="Tool groups">
+            <button class="panel-tab-button active" data-panel-tab="vehicles">Vehicles</button>
+            <button class="panel-tab-button" data-panel-tab="drawing">Drawing</button>
+            <button class="panel-tab-button" data-panel-tab="landmarks">Landmarks</button>
+          </div>
+
+          <section class="tab-panel active" data-tab-panel="vehicles">
+            <div class="section-header">
+              <div>
+                <h2>Vehicles</h2>
+                <p class="small-copy">Place training vehicles and operate the selected one.</p>
+              </div>
+            </div>
+            <div class="stack">
+              <label>
+                Vehicle Type
+                <select id="newVehicleType">
+                  <option value="compact">Compact</option>
+                  <option value="sedan" selected>Sedan</option>
+                  <option value="suv">SUV</option>
+                  <option value="hatchback">Hatchback</option>
+                  <option value="truck">Truck</option>
+                  <option value="motorcycle">Motorcycle</option>
+                </select>
+              </label>
+              <div class="button-row">
+                <button id="addVehicle" class="button">Add Vehicle</button>
+                <button id="duplicateVehicle" class="button secondary">Duplicate</button>
+              </div>
+              <button id="deleteVehicle" class="button secondary danger">Delete Selected Vehicle</button>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-tab-panel="drawing">
+            <div class="section-header">
+              <div>
+                <h2>Drawing</h2>
+                <p class="small-copy">Markup routes, stopping points, and discussion notes.</p>
+              </div>
+            </div>
+            <div class="tool-grid" id="drawToolButtons">
+              <button class="tool-button active" data-draw-tool="pen">Pen</button>
+              <button class="tool-button" data-draw-tool="line">Line</button>
+              <button class="tool-button" data-draw-tool="arrow">Arrow</button>
+              <button class="tool-button" data-draw-tool="rect">Rect</button>
+              <button class="tool-button" data-draw-tool="ellipse">Ellipse</button>
+              <button class="tool-button" data-draw-tool="eraser">Eraser</button>
+            </div>
+            <div class="stack compact">
+              <label>
+                Stroke Width
+                <input id="strokeWidth" type="range" min="1" max="12" value="3" />
+              </label>
+              <div>
+                <span class="label">Colors</span>
+                <div class="swatches" id="colorSwatches"></div>
+              </div>
+              <div class="button-row">
+                <button id="undoDrawing" class="button secondary">Undo</button>
+                <button id="clearDrawings" class="button secondary danger">Clear</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-tab-panel="landmarks">
+            <div class="section-header">
+              <div>
+                <h2>Landmark Poles</h2>
+                <p class="small-copy">Add Japanese driving-ground marker poles with numbered circular plates.</p>
+              </div>
+            </div>
+            <div class="stack compact">
+              <label>
+                Number
+                <input id="landmarkNumberInput" type="number" min="1" max="999" placeholder="Auto next" />
+              </label>
+              <div>
+                <span class="label">Plate Color</span>
+                <div class="segmented landmark-color-strip" id="landmarkColorStrip">
+                  <button class="landmark-color-button active" data-landmark-color="yellow">Yellow</button>
+                  <button class="landmark-color-button" data-landmark-color="white">White</button>
+                </div>
+              </div>
+              <div class="button-row">
+                <button id="addLandmark" class="button">Add Pole</button>
+                <button id="deleteLandmark" class="button secondary danger">Delete</button>
+              </div>
+              <div id="landmarkEditor" class="stack compact">
+                <p class="small-copy">Select a landmark in Edit mode to move it, change its number, or recolor it.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Board Notes</h2>
+            <p class="small-copy">
+              Use <span class="mono">Edit</span> to move vehicles and poles, <span class="mono">Drive</span> to
+              operate the selected vehicle, and <span class="mono">Draw</span> to annotate the ground.
+            </p>
+          </section>
+          </div>
+        </aside>
+
+        <section class="board-section">
+          <div class="board-header">
+            <div>
+              <p class="eyebrow">Current Map</p>
+              <strong id="mapName">KDS Driving Ground</strong>
+            </div>
+            <div class="board-status">
+              <span class="status-pill" id="modeStatus">Mode: Edit</span>
+              <span class="status-pill" id="selectionStatus">Selection: None</span>
+              <span class="status-pill" id="selectedVehicleStatus">No vehicle selected</span>
+            </div>
+          </div>
+
+          <div class="stage-frame">
+            <div id="stage" class="stage" tabindex="0" aria-label="Driving ground stage">
+              <img id="mapImage" src="maps/KDS-driving-ground.png" alt="Driving ground map" />
+              <svg id="drawingLayer" class="drawing-layer"></svg>
+              <div id="landmarkLayer" class="landmark-layer"></div>
+              <div id="vehicleLayer" class="vehicle-layer"></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel inspector-panel">
+          <div class="panel-utility-row">
+            <span>Vehicle console</span>
+            <button id="toggleInspector" class="panel-toggle" type="button" aria-expanded="true" aria-controls="inspectorContent">Fold panel <span aria-hidden="true">→</span></button>
+          </div>
+          <div id="inspectorContent" class="panel-content">
+          <section>
+            <div class="section-header compact-header"><h2>Selected Vehicle</h2></div>
+            <div id="vehicleInspector" class="stack">
+              <p class="small-copy">Select a vehicle to edit its properties.</p>
+            </div>
+          </section>
+
+          <section>
+            <h2>Driving Controls</h2>
+            <div class="stack">
+              <div class="pedal-grid">
+                <button id="reverseToggle" class="pedal-button reverse">Reverse</button>
+                <button id="throttleButton" class="pedal-button accel">Throttle</button>
+                <button id="brakeButton" class="pedal-button brake">Brake</button>
+              </div>
+              <div class="signal-row">
+                <button class="signal-button" data-signal="left">Left</button>
+                <button class="signal-button" data-signal="off">Off</button>
+                <button class="signal-button" data-signal="right">Right</button>
+                <button class="signal-button" data-signal="hazard">Hazard</button>
+              </div>
+              <div class="steering-card">
+                <div class="steering-readout">
+                  <span>Steering</span>
+                  <strong id="steeringReadout">0%</strong>
+                </div>
+                <div id="steeringWheel" class="steering-wheel">
+                  <div id="steeringFace" class="steering-face">
+                    <div class="steering-ring"></div>
+                    <div class="steering-spoke steering-spoke-top"></div>
+                    <div class="steering-spoke steering-spoke-left"></div>
+                    <div class="steering-spoke steering-spoke-right"></div>
+                    <div class="steering-grip-marker"></div>
+                    <div class="steering-center"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="small-copy">
+                Keys: <span class="mono">W / ↑</span> throttle, <span class="mono">S / ↓</span> brake,
+                <span class="mono">R</span> reverse, <span class="mono">Q</span> left signal,
+                <span class="mono">E</span> right signal, <span class="mono">C</span> clear signal.
+              </p>
+            </div>
+          </section>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

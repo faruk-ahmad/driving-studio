@@ -107,24 +107,54 @@ Suggested controls:
 - steering wheel UI that can be dragged left or right with the mouse
 - keyboard accelerator key
 - keyboard brake key
+- keyboard reverse control
 - clickable signal icons for left, right, and hazard
-- optional reverse toggle
 
 Recommended initial key bindings:
 
 - `ArrowUp` or `W`: accelerator
-- `ArrowDown` or `S`: brake / reverse intent
+- `ArrowDown` or `S`: brake
+- `R` or `X`: reverse
 - `ArrowLeft` and `ArrowRight`: optional fine steering
 - `Space`: emergency brake
 - `Q`: left signal
 - `E`: right signal
-- `R`: reset signal
+- `C`: reset signal
 - `Tab`: cycle selected vehicle
 - `Delete`: remove selected vehicle
 
 Important note:
 
-For the first version, acceleration and braking can affect only a simple movement model for the selected vehicle. The app does not need realistic tire or steering geometry at the start.
+For the first version, acceleration, braking, and reverse can affect only a simple movement model for the selected vehicle. The app does not need realistic tire or steering geometry at the start.
+
+### 4. Discussion Drawing Tools
+
+The app should also support a free-form annotation layer for live discussion.
+
+Initial drawing tools should include:
+
+- pen
+- straight line
+- arrow
+- rectangle
+- circle / ellipse
+- eraser
+- color picker with multiple preset colors
+- stroke width selection
+
+Expected use cases:
+
+- drawing intended routes
+- marking stop points
+- circling hazards or blind spots
+- sketching temporary instructions during class or group review
+
+The drawing layer should sit above the map and vehicle layer, with the option to switch between:
+
+- `Drive/Edit Vehicles` mode
+- `Draw/Annotate` mode
+
+This avoids accidental vehicle dragging while drawing.
 
 ### 4. Scenario Demonstration
 
@@ -169,6 +199,9 @@ Contains quick tools:
 - delete vehicle
 - rotate mode
 - pan mode
+- pen tool
+- shape tools
+- eraser
 
 ### Center Stage
 
@@ -176,7 +209,7 @@ The main map canvas area:
 
 - background map image
 - vehicle overlays
-- optional route arrows or markers later
+- drawing / annotation overlay
 
 ### Right Inspector
 
@@ -197,8 +230,10 @@ Contains:
 - draggable steering wheel
 - accelerator indicator
 - brake indicator
+- reverse indicator / toggle
 - signal buttons
-- reverse toggle
+- color swatches when draw mode is active
+- stroke size control when draw mode is active
 
 ## Interaction Model
 
@@ -233,8 +268,14 @@ Simple version 1 movement model:
 
 - hold accelerator key to move forward in the current heading
 - hold brake key to reduce movement speed
+- hold or toggle reverse to move backward in the current heading
 - steering input changes heading gradually while moving
-- reverse can be a toggle or a hold state
+
+Recommended behavior:
+
+- reverse should be an explicit control, not merged with brake
+- a vehicle can show a visible `R` state badge when reverse is active
+- forward and reverse inputs should never be active at the same time
 
 This creates enough realism for discussion without requiring a full car simulation engine.
 
@@ -317,7 +358,22 @@ Recommended app state:
   selectedVehicleId: "veh-1",
   ui: {
     controlMode: "drive",
-    steeringReturn: true
+    steeringReturn: true,
+    drawTool: "pen",
+    drawColor: "#ff3b30",
+    drawWidth: 3
+  },
+  drawings: [
+    {
+      id: "draw-1",
+      tool: "arrow",
+      color: "#ff3b30",
+      width: 3,
+      points: [
+        { x: 0.20, y: 0.30 },
+        { x: 0.38, y: 0.44 }
+      ]
+    }
   }
 }
 ```
@@ -331,6 +387,13 @@ Initial save/load plan:
 - save scenario JSON to local file
 - load scenario JSON from local file
 - optionally mirror latest state in `localStorage`
+
+Saved scenario data should include:
+
+- selected map
+- all vehicles
+- all drawing annotations
+- current labels and control states
 
 This keeps the app fully static with no server dependency.
 
@@ -349,6 +412,8 @@ This keeps the app fully static with no server dependency.
 - upload alternate map
 - add/select/move/rotate/delete vehicles
 - vehicle labels
+- reverse-ready vehicle state model
+- basic draw layer with pen, eraser, and color choice
 - responsive layout
 
 This is the best first implementation target.
@@ -357,17 +422,21 @@ This is the best first implementation target.
 
 - steering wheel widget
 - keyboard accelerator and brake
+- explicit reverse control
 - selected vehicle movement
 - signal icons and status
-- reverse toggle
+- simple shape tools for annotation
+- draw/edit mode switching
 
 ### Phase 3: Scenario Tools
 
 - save/load scenario
 - duplicate vehicles
 - reset positions
-- route markers
-- stop points or note markers
+- route markers if still needed in addition to free drawing
+- note markers
+- undo/redo for drawing actions
+- clear annotations button
 
 ### Phase 4: Polish
 
@@ -376,6 +445,7 @@ This is the best first implementation target.
 - touch support
 - keyboard shortcut help overlay
 - smoother animations
+- annotation selection and editing
 
 ## Risks And Design Decisions
 
@@ -404,7 +474,9 @@ Dragging vehicles and driving them with keyboard/mouse could conflict.
 Mitigation:
 
 - separate `edit mode` and `drive mode`
-- or only allow movement controls on the selected vehicle
+- separate `draw mode` from vehicle manipulation
+- only allow movement controls on the selected vehicle
+- disable drawing input while actively driving
 
 ### 4. GitHub Pages Compatibility
 
@@ -425,19 +497,22 @@ When implementation starts, the first coding milestone should produce:
 - one JS file
 - default map loaded from `maps/KDS-driving-ground.png`
 - ability to add and manipulate vehicles on the map
+- basic annotation tools with pen, eraser, and color presets
 
 Then the next milestone should add:
 
 - steering wheel drag control
 - keyboard throttle/brake
+- explicit reverse control
 - clickable signal icons
 - simple selected-vehicle motion
+- line/arrow/shape drawing tools
 
 ## Open Questions For Later
 
 - Should vehicle movement be free on the whole map, or lightly constrained to roads?
 - Should the app support touch devices from the first build?
-- Should users be able to draw arrows, routes, and annotations?
+- Should annotations be tied to the map globally, or optionally attached to a vehicle?
 - Should there be preset scenarios for lessons?
 - Should multiple users eventually collaborate in real time?
 
@@ -449,9 +524,10 @@ That gives the fastest path to something useful:
 
 1. map background
 2. draggable vehicle tokens
-3. selection and inspector
-4. simple control widgets
-5. scenario save/load
+3. annotation layer
+4. selection and inspector
+5. simple control widgets including reverse
+6. scenario save/load
 
 This path keeps the project lightweight, easy to maintain, and fully compatible with local browser use and GitHub Pages hosting.
 
