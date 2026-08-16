@@ -981,6 +981,10 @@ output {
   pointer-events: none;
 }
 
+.drawing-hit-surface {
+  pointer-events: all;
+}
+
 .inspector-card {
   padding: 14px;
   background: rgba(255, 255, 255, 0.65);
@@ -1960,4 +1964,39 @@ output {
   .studio-brand { align-items: flex-start; flex-direction: column; gap: 9px; }
   .map-attribution { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
   .map-attribution-file { grid-column: auto; white-space: normal; }
+}
+
+/* Final control contrast override: every surface gets an explicit readable color. */
+.button.secondary,
+.tool-button,
+.mode-button,
+.signal-button,
+.landmark-color-button,
+.panel-tab-button {
+  color: #26332f !important;
+}
+
+.button:not(.secondary),
+.pedal-button,
+.button.danger,
+.pedal-button.brake {
+  color: #fffaf2 !important;
+}
+
+.button.secondary.danger {
+  background: linear-gradient(180deg, #b54b3f, #8f2f28) !important;
+  border-color: rgba(119, 38, 31, 0.42) !important;
+  color: #fffaf2 !important;
+}
+
+.mode-button.active,
+.tool-button.active,
+.signal-button.active,
+.landmark-color-button.active,
+.panel-tab-button.active {
+  color: #0e765f !important;
+}
+
+.panel-toggle {
+  color: #5e6863 !important;
 }

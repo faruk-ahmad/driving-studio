@@ -392,6 +392,11 @@ function deleteVehicle() {
 
 function setMode(mode) {
   state.mode = mode;
+  if (mode === "draw") {
+    state.panelTab = "drawing";
+  } else if (mode === "drive" || mode === "edit") {
+    state.panelTab = "vehicles";
+  }
   state.ui.drawingSession = null;
   state.ui.dragSession = null;
   render();
@@ -440,6 +445,8 @@ function setPanelFold(panelName, isFolded) {
 
 function setDrawTool(tool) {
   state.ui.drawTool = tool;
+  state.mode = "draw";
+  state.panelTab = "drawing";
   render();
 }
 
@@ -651,6 +658,18 @@ function renderDrawings(previewDrawing = null) {
   elements.drawingLayer.setAttribute("viewBox", "0 0 100 100");
   elements.drawingLayer.setAttribute("preserveAspectRatio", "none");
 
+  if (state.mode === "draw") {
+    const hitSurface = document.createElementNS(svgNs, "rect");
+    hitSurface.setAttribute("class", "drawing-hit-surface");
+    hitSurface.setAttribute("x", "0");
+    hitSurface.setAttribute("y", "0");
+    hitSurface.setAttribute("width", "100");
+    hitSurface.setAttribute("height", "100");
+    hitSurface.setAttribute("fill", "transparent");
+    hitSurface.setAttribute("pointer-events", "all");
+    elements.drawingLayer.append(hitSurface);
+  }
+
   for (const drawing of state.drawings) {
     elements.drawingLayer.append(createDrawingElement(drawing));
   }
@@ -661,7 +680,8 @@ function renderDrawings(previewDrawing = null) {
     elements.drawingLayer.append(preview);
   }
 
-  elements.drawingLayer.style.pointerEvents = state.mode === "draw" ? "auto" : "none";
+  elements.drawingLayer.style.pointerEvents = state.mode === "draw" ? "all" : "none";
+  elements.drawingLayer.style.zIndex = state.mode === "draw" ? "8" : "2";
 }
 
 function landmarkTemplate(landmark) {
@@ -685,6 +705,7 @@ function renderLandmarks() {
   elements.landmarkLayer.style.pointerEvents = "none";
 
   for (const landmarkElement of elements.landmarkLayer.querySelectorAll("[data-landmark-id]")) {
+    landmarkElement.style.pointerEvents = state.mode === "draw" ? "none" : "auto";
     landmarkElement.addEventListener("pointerdown", event => {
       event.preventDefault();
       event.stopPropagation();
@@ -741,6 +762,9 @@ function vehicleTemplate(vehicle) {
 
 function renderVehicles() {
   elements.vehicleLayer.innerHTML = state.vehicles.map(vehicleTemplate).join("");
+  for (const vehicleElement of elements.vehicleLayer.querySelectorAll("[data-vehicle-id]")) {
+    vehicleElement.style.pointerEvents = state.mode === "draw" ? "none" : "auto";
+  }
 }
 
 function renderLandmarkEditor() {
@@ -904,6 +928,12 @@ function updateControls() {
   elements.steeringReadout.textContent = `${steeringPercent}%`;
   elements.steeringFace.style.transform = `rotate(${state.ui.steering * 145}deg)`;
   elements.vehicleLayer.style.pointerEvents = state.mode === "draw" ? "none" : "auto";
+  for (const vehicleElement of elements.vehicleLayer.querySelectorAll("[data-vehicle-id]")) {
+    vehicleElement.style.pointerEvents = state.mode === "draw" ? "none" : "auto";
+  }
+  for (const landmarkElement of elements.landmarkLayer.querySelectorAll("[data-landmark-id]")) {
+    landmarkElement.style.pointerEvents = state.mode === "draw" ? "none" : "auto";
+  }
 }
 
 function renderColorSwatches() {
@@ -1193,6 +1223,19 @@ function handleStagePointerDown(event) {
   }
 }
 
+function handleDrawingPointerDownCapture(event) {
+  if (state.mode !== "draw") {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+  window._lastPointerX = event.clientX;
+  window._lastPointerY = event.clientY;
+  beginDrawing(getPointerNormalized(event.clientX, event.clientY));
+  elements.stage.setPointerCapture(event.pointerId);
+}
+
 function handleStagePointerDownCapture(event) {
   const landmarkElement = event.target.closest?.("[data-landmark-id]");
   if (!landmarkElement || state.mode === "draw") {
@@ -1362,7 +1405,19 @@ function bindEvents() {
     button.addEventListener("click", () => setMode(button.dataset.mode));
   }
   for (const button of elements.panelTabButtons) {
-    button.addEventListener("click", () => setPanelTab(button.dataset.panelTab));
+    button.addEventListener("click", () => {
+      const tab = button.dataset.panelTab;
+      if (tab === "drawing") {
+        setMode("draw");
+      } else if (state.mode === "draw") {
+        state.mode = "edit";
+        state.panelTab = tab;
+        state.ui.drawingSession = null;
+        render();
+      } else {
+        setPanelTab(tab);
+      }
+    });
   }
   for (const button of elements.drawToolButtons) {
     button.addEventListener("click", () => setDrawTool(button.dataset.drawTool));
@@ -1405,6 +1460,7 @@ function bindEvents() {
   activatePointerControl("pointerThrottle", elements.throttleButton);
   activatePointerControl("pointerBrake", elements.brakeButton);
 
+  elements.stage.addEventListener("pointerdown", handleDrawingPointerDownCapture, true);
   elements.stage.addEventListener("pointerdown", handleStagePointerDown);
   elements.stage.addEventListener("pointerdown", handleStagePointerDownCapture, true);
   elements.stage.addEventListener("pointermove", handleStagePointerMove);
